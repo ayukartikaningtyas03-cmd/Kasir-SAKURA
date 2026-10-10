@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir Hebat Salsabila - Toko Mainan & Belajar Anak</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Nunito for child-friendly typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            salsa: {
+              pink: '#FF6B9D',
+              yellow: '#FFC72C',
+              blue: '#4D96FF',
+              green: '#6BCB77',
+              purple: '#9B51E0',
+              orange: '#FF9F45'
+            }
+          },
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            nunito: ['Nunito', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 50%, #fce7f3 100%);
+      min-height: 100vh;
+      user-select: none;
+    }
+
+    .bounce-subtle {
+      animation: bounceSubtle 2s infinite;
+    }
+    @keyframes bounceSubtle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .pop-in {
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="p-2 sm:p-4 text-slate-800">
+
+  <div class="max-w-6xl mx-auto">
+    <!-- Header Utama -->
+    <header class="bg-white/90 backdrop-blur border-4 border-amber-300 shadow-xl rounded-3xl p-3 sm:p-5 mb-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-amber-400 text-white p-3 rounded-2xl shadow-inner text-3xl sm:text-4xl bounce-subtle">
+          🛒
+        </div>
+        <div>
+          <h1 class="font-fredoka text-2xl sm:text-4xl text-rose-500 font-bold tracking-wide">
+            KASIR HEBAT SALSABILA
+          </h1>
+          <p class="text-xs sm:text-sm font-bold text-sky-600">
+            🌟 Belajar Jual Beli & Berhitung Sederhana (TK B / PAUD) 🌟
+          </p>
+        </div>
+      </div>
+
+      <!-- Control Bar Suara & Navigasi Tab -->
+      <div class="flex items-center gap-2 flex-wrap justify-center">
+        <!-- Tombol Unmute / Voice Toggle -->
+        <button id="btn-toggle-voice" onclick="toggleVoice()" class="flex items-center gap-2 bg-purple-100 border-2 border-purple-400 text-purple-700 px-3 py-2 rounded-2xl font-bold text-xs sm:text-sm hover:bg-purple-200 transition">
+          <span id="voice-icon" class="text-xl">🔊</span>
+          <span id="voice-label">Suara: ON</span>
+        </button>
+
+        <!-- Navigasi Menu -->
+        <div class="bg-slate-100 p-1.5 rounded-2xl border-2 border-slate-200 flex gap-1">
+          <button id="tab-kasir" onclick="switchTab('kasir')" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-base transition bg-rose-500 text-white shadow">
+            🏪 Menu Kasir
+          </button>
+          <button id="tab-barang" onclick="switchTab('barang')" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-base transition text-slate-600 hover:bg-slate-200">
+            📦 Kelola Barang
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- TAB 1: MENU KASIR -->
+    <div id="section-kasir" class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      
+      <!-- Sisi Kiri: Katalog Juaran (8 Cols) -->
+      <div class="lg:col-span-7 space-y-4">
+        
+        <!-- Filter Kategori -->
+        <div class="bg-white border-2 border-sky-200 rounded-3xl p-3 shadow-md">
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Pilih Jenis Juaran:</div>
+          <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-1" id="category-bar">
+            <!-- Dynamically Rendered Categories -->
+          </div>
+        </div>
+
+        <!-- Grid Barang -->
+        <div class="bg-white/80 border-2 border-slate-200 rounded-3xl p-4 shadow-md min-h-[420px]">
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="font-fredoka text-lg sm:text-xl text-slate-700 font-bold flex items-center gap-2">
+              <span id="cat-title-icon">🛒</span> <span id="cat-title-name">Semua Juaran</span>
+            </h2>
+            <span class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full" id="item-count-badge">8 Barang</span>
+          </div>
+
+          <div id="grid-produk" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <!-- Products Card Rendered Here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Sisi Kanan: Struk / Keranjang Belanja & Pembayaran (5 Cols) -->
+      <div class="lg:col-span-5 space-y-4">
+        
+        <div class="bg-white border-4 border-emerald-300 rounded-3xl p-4 shadow-lg flex flex-col h-full justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b-2 border-dashed border-slate-200 pb-3 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">🧾</span>
+                <h2 class="font-fredoka text-xl text-emerald-600 font-bold">Keranjang Belanja</h2>
+              </div>
+              <button onclick="resetKeranjang()" class="text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-600 px-2.5 py-1.5 rounded-xl transition flex items-center gap-1">
+                🗑️ Bersihkan
+              </button>
+            </div>
+
+            <!-- List Item di Keranjang (Penjumlahan) -->
+            <div id="list-keranjang" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar pr-1 mb-3">
+              <!-- Item keranjang dimasukkan via JS -->
+              <div class="text-center py-8 text-slate-400 font-bold text-sm">
+                🛍️ Belum ada barang yang dibeli.<br>Ketuk gambar barang di sebelah kiri!
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Harga (Penjumlahan) -->
+          <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 mb-4">
+            <div class="flex justify-between items-center text-slate-600 font-bold text-sm mb-1">
+              <span>Total yang Harus Dibayar:</span>
+              <span class="text-xs bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-extrabold">Penjumlahan</span>
+            </div>
+            <div class="text-3xl sm:text-4xl font-fredoka font-bold text-emerald-600 flex items-center justify-between">
+              <span>Rp</span>
+              <span id="txt-total-bayar">0</span>
+            </div>
+
+            <!-- Papan Penjumlahan Angka Belajar TK -->
+            <div id="papan-penjumlahan" onclick="bacaPenjumlahan()" class="mt-3 bg-white hover:bg-amber-100/80 transition cursor-pointer border-2 border-amber-300 hover:border-amber-400 rounded-2xl p-3 text-center shadow-sm active:scale-95 group relative">
+              <div class="text-xs font-bold text-amber-800 uppercase tracking-wide flex items-center justify-center gap-1 mb-1 flex-wrap">
+                <span>🧮</span> Penjumlahan Belajar TK
+                <span class="bg-amber-400 text-amber-950 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse flex items-center gap-1">
+                  🔊 Ketuk Suara
+                </span>
+              </div>
+              <div id="txt-rumus-angka" class="font-fredoka text-lg sm:text-xl font-extrabold text-amber-600 bg-amber-50 group-hover:bg-amber-100 p-2.5 rounded-xl border border-amber-200 tracking-wide break-words transition">
+                0
+              </div>
+              <div id="txt-rumus-emoji" class="text-xs font-bold text-amber-700 mt-2 break-words">
+                <!-- Visual Emoji Penjumlahan -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Pilihan Uang Bayar -->
+          <div class="space-y-2">
+            <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-wide">
+              💵 Pilih Uang Bayar Pembeli:
+            </label>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="bayarDenganUang(1000)" class="bg-blue-50 hover:bg-blue-100 border-2 border-blue-300 text-blue-700 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex flex-col items-center">
+                <span>Rp 1.000</span>
+                <span class="text-[10px] text-blue-500">Seribu</span>
+              </button>
+              <button onclick="bayarDenganUang(2000)" class="bg-blue-50 hover:bg-blue-100 border-2 border-blue-300 text-blue-700 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex flex-col items-center">
+                <span>Rp 2.000</span>
+                <span class="text-[10px] text-blue-500">Dua Ribu</span>
+              </button>
+              <button onclick="bayarDenganUang(5000)" class="bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 text-amber-700 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex flex-col items-center">
+                <span>Rp 5.000</span>
+                <span class="text-[10px] text-amber-600">Lima Ribu</span>
+              </button>
+              <button onclick="bayarDenganUang(10000)" class="bg-purple-50 hover:bg-purple-100 border-2 border-purple-300 text-purple-700 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex flex-col items-center">
+                <span>Rp 10.000</span>
+                <span class="text-[10px] text-purple-500">Sepuluh Ribu</span>
+              </button>
+              <button onclick="bayarDenganUang(20000)" class="bg-teal-50 hover:bg-teal-100 border-2 border-teal-300 text-teal-700 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex flex-col items-center">
+                <span>Rp 20.000</span>
+                <span class="text-[10px] text-teal-600">Dua Puluh Ribu</span>
+              </button>
+              <button onclick="bayarDenganUang(50000)" class="bg-sky-50 hover:bg-sky-100 border-2 border-sky-300 text-sky-700 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex flex-col items-center">
+                <span>Rp 50.000</span>
+                <span class="text-[10px] text-sky-600">Lima Puluh Ribu</span>
+              </button>
+            </div>
+
+            <!-- Manual Input Uang Custom -->
+            <div class="flex gap-2 pt-1">
+              <input type="number" id="input-uang-pas" placeholder="Ketik Nominal Pas/Lain..." class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl px-3 py-1.5 text-sm font-bold focus:outline-none focus:border-emerald-500">
+              <button onclick="bayarManual()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-4 py-1.5 rounded-xl text-sm transition">
+                Bayar
+              </button>
+            </div>
+          </div>
+
+          <!-- Hasil Kembalian (Pengurangan) -->
+          <div id="box-kembalian" class="mt-3 bg-amber-50 border-2 border-amber-300 rounded-2xl p-3 text-center hidden pop-in">
+            <div class="text-xs font-bold text-amber-800">Uang Kembalian (Pengurangan):</div>
+            <div class="text-2xl font-fredoka font-bold text-amber-600 my-0.5">
+              Rp <span id="txt-kembalian">0</span>
+            </div>
+            <div id="txt-kembali-suara" class="text-xs font-bold text-amber-700 bg-amber-100/70 p-1.5 rounded-xl">
+              <!-- Teks penjelasan kembalian -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 2: KELOLA DAFTAR BARANG JUARAN -->
+    <div id="section-barang" class="hidden space-y-4 pop-in">
+      <div class="bg-white border-4 border-purple-300 rounded-3xl p-5 shadow-xl">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-purple-100 pb-4 mb-4 gap-2">
+          <div>
+            <h2 class="font-fredoka text-2xl text-purple-700 font-bold flex items-center gap-2">
+              <span>📦</span> Pengaturan & Tambah Jenis Barang Juaran
+            </h2>
+            <p class="text-xs font-bold text-slate-500">Tambah barang favorit anak dan atur harganya untuk bermain kasir!</p>
+          </div>
+          <button onclick="resetDataBawaan()" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-xl transition border border-slate-300">
+            🔄 Kembalikan Barang Bawaan
+          </button>
+        </div>
+
+        <!-- Form Tambah Barang -->
+        <form id="form-tambah-barang" onsubmit="handleSimpanBarang(event)" class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 items-end">
+          <div>
+            <label class="block text-xs font-bold text-purple-800 mb-1">Nama Barang:</label>
+            <input type="text" id="add-nama" required placeholder="Contoh: Donat Cokelat" class="w-full bg-white border-2 border-purple-200 rounded-xl px-3 py-2 text-sm font-bold focus:outline-none focus:border-purple-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-purple-800 mb-1">Harga (Rupiah):</label>
+            <input type="number" id="add-harga" required min="100" step="100" placeholder="1000" class="w-full bg-white border-2 border-purple-200 rounded-xl px-3 py-2 text-sm font-bold focus:outline-none focus:border-purple-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-purple-800 mb-1">Kategori Juaran:</label>
+            <select id="add-kategori" class="w-full bg-white border-2 border-purple-200 rounded-xl px-3 py-2 text-sm font-bold focus:outline-none focus:border-purple-500">
+              <option value="Makanan">🍞 Makanan</option>
+              <option value="Minuman">🧃 Minuman</option>
+              <option value="Buah">🍎 Buah-buahan</option>
+              <option value="Sembako">🍚 Sembako</option>
+              <option value="Alat Tulis">✏️ Alat Tulis Sekolah</option>
+              <option value="Mainan">🧸 Mainan</option>
+              <option value="Obat">💊 Obat-obatan</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-purple-800 mb-1">Pilih Emoji:</label>
+            <div class="flex gap-2">
+              <input type="text" id="add-emoji" maxlength="2" value="🍩" class="w-16 bg-white border-2 border-purple-200 rounded-xl px-3 py-2 text-sm text-center font-bold focus:outline-none focus:border-purple-500">
+              <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-sm transition shadow-md">
+                ➕ Simpan Barang
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Tabel / List Barang yang Terdaftar -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-purple-100 text-purple-900 font-bold text-xs uppercase border-b-2 border-purple-200">
+                <th class="p-3 rounded-l-xl">Barang</th>
+                <th class="p-3">Kategori</th>
+                <th class="p-3">Harga</th>
+                <th class="p-3 text-center rounded-r-xl">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="table-barang-body" class="divide-y divide-purple-100 text-sm font-bold text-slate-700">
+              <!-- Content rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Sukses Pembayaran / Struk Belanja -->
+  <div id="modal-sukses" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border-4 border-amber-400 rounded-3xl p-6 max-w-md w-full shadow-2xl pop-in text-center relative">
+      <div class="text-6xl mb-2 bounce-subtle">🌟🎉</div>
+      <h3 class="font-fredoka text-2xl text-emerald-600 font-bold">HEBAT SEKALI SALSABILA!</h3>
+      <p class="text-xs font-bold text-slate-500 mb-4">Transaksi Belanja Berhasil Dihitung!</p>
+      
+      <!-- Struk Nota Belanja -->
+      <div class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-4 text-left font-mono text-xs space-y-2 mb-4">
+        <div class="text-center font-bold font-fredoka text-base text-amber-800 border-b border-amber-200 pb-1">
+          TOKO SALSABILA HEBAT
+        </div>
+        <div id="modal-struk-items" class="space-y-1 text-slate-700 py-2 border-b border-amber-200">
+          <!-- Items List -->
+        </div>
+        <div class="flex justify-between font-bold text-sm text-slate-900 pt-1">
+          <span>Total Belanja:</span>
+          <span>Rp <span id="modal-total">0</span></span>
+        </div>
+        <div class="flex justify-between font-bold text-slate-600">
+          <span>Uang Dibayar:</span>
+          <span>Rp <span id="modal-bayar">0</span></span>
+        </div>
+        <div class="flex justify-between font-bold text-emerald-600 text-sm border-t border-amber-200 pt-1">
+          <span>Uang Kembalian:</span>
+          <span>Rp <span id="modal-kembali">0</span></span>
+        </div>
+      </div>
+
+      <button onclick="tutupModal()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-fredoka font-bold py-3 rounded-2xl text-lg shadow-lg transition">
+        🎈 Lanjut Jualan Lagi
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       DATABASES & GLOBAL STATE
+       ========================================================================== */
+    const DEFAULT_PRODUCTS = [
+      // Makanan & Jajan
+      { id: '1', nama: 'Donat Cokelat', harga: 1000, kategori: 'Makanan', emoji: '🍩' },
+      { id: '2', nama: 'Roti Tawar', harga: 2000, kategori: 'Makanan', emoji: '🍞' },
+      { id: '3', nama: 'Cokelat Batang', harga: 3000, kategori: 'Makanan', emoji: '🍫' },
+      { id: '4', nama: 'Biskuit Renyah', harga: 2000, kategori: 'Makanan', emoji: '🍪' },
+      { id: '5', nama: 'Es Krim Cone', harga: 3000, kategori: 'Makanan', emoji: '🍦' },
+      { id: '6', nama: 'Permen Lollipop', harga: 1000, kategori: 'Makanan', emoji: '🍭' },
+      { id: '7', nama: 'Kentang Goreng', harga: 4000, kategori: 'Makanan', emoji: '🍟' },
+      { id: '8', nama: 'Popcorn Manis', harga: 3000, kategori: 'Makanan', emoji: '🍿' },
+      { id: '9', nama: 'Sosis Bakar', harga: 2000, kategori: 'Makanan', emoji: '🌭' },
+      { id: '10', nama: 'Wafer Cokelat', harga: 1000, kategori: 'Makanan', emoji: '🧇' },
+      { id: '11', nama: 'Kue Muffin', harga: 3000, kategori: 'Makanan', emoji: '🧁' },
+
+      // Minuman
+      { id: '12', nama: 'Susu Kotak Cokelat', harga: 2000, kategori: 'Minuman', emoji: '🧃' },
+      { id: '13', nama: 'Susu Botol Strawberi', harga: 3000, kategori: 'Minuman', emoji: '🥛' },
+      { id: '14', nama: 'Air Mineral Botol', harga: 1000, kategori: 'Minuman', emoji: '💧' },
+      { id: '15', nama: 'Es Teh Manis', harga: 2000, kategori: 'Minuman', emoji: '🥤' },
+      { id: '16', nama: 'Jus Jeruk Segar', harga: 3000, kategori: 'Minuman', emoji: '🍊' },
+      { id: '17', nama: 'Minuman Boba', harga: 5000, kategori: 'Minuman', emoji: '🧋' },
+      { id: '18', nama: 'Yogurt Botol', harga: 3000, kategori: 'Minuman', emoji: '🍼' },
+
+      // Sembako
+      { id: '19', nama: 'Telur Ayam (2 Butir)', harga: 2000, kategori: 'Sembako', emoji: '🥚' },
+      { id: '20', nama: 'Beras 1kg', harga: 10000, kategori: 'Sembako', emoji: '🍚' },
+      { id: '21', nama: 'Minyak Goreng Botol', harga: 5000, kategori: 'Sembako', emoji: '🍾' },
+      { id: '22', nama: 'Gula Pasir 1/2kg', harga: 4000, kategori: 'Sembako', emoji: '🍬' },
+      { id: '23', nama: 'Mi Instan Goreng', harga: 3000, kategori: 'Sembako', emoji: '🍜' },
+      { id: '24', nama: 'Garam Dapur', harga: 1000, kategori: 'Sembako', emoji: '🧂' },
+      { id: '25', nama: 'Kecap Manis Botol', harga: 2000, kategori: 'Sembako', emoji: '🍶' },
+      { id: '26', nama: 'Margarin / Mentega', harga: 3000, kategori: 'Sembako', emoji: '🧈' },
+
+      // Alat Tulis Sekolah
+      { id: '27', nama: 'Pensil Warna Set', harga: 3000, kategori: 'Alat Tulis', emoji: '✏️' },
+      { id: '28', nama: 'Buku Gambar A4', harga: 4000, kategori: 'Alat Tulis', emoji: '🎨' },
+      { id: '29', nama: 'Buku Tulis Sekolah', harga: 3000, kategori: 'Alat Tulis', emoji: '📓' },
+      { id: '30', nama: 'Krayon 12 Warna', harga: 5000, kategori: 'Alat Tulis', emoji: '🖍️' },
+      { id: '31', nama: 'Spidol Warna-Warni', harga: 4000, kategori: 'Alat Tulis', emoji: '🖊️' },
+      { id: '32', nama: 'Penghapus Lucu', harga: 1000, kategori: 'Alat Tulis', emoji: '🧹' },
+      { id: '33', nama: 'Penggaris Plastik', harga: 2000, kategori: 'Alat Tulis', emoji: '📏' },
+      { id: '34', nama: 'Rautan Pensil', harga: 1000, kategori: 'Alat Tulis', emoji: '✂️' },
+      { id: '35', nama: 'Lem Kertas (Paper Glue)', harga: 2000, kategori: 'Alat Tulis', emoji: '🧴' },
+      { id: '36', nama: 'Tempat Pensil Lucu', harga: 5000, kategori: 'Alat Tulis', emoji: '👝' },
+
+      // Mainan
+      { id: '37', nama: 'Mobil-Mobilan Balap', harga: 5000, kategori: 'Mainan', emoji: '🚗' },
+      { id: '38', nama: 'Boneka Beruang', harga: 10000, kategori: 'Mainan', emoji: '🧸' },
+      { id: '39', nama: 'Bola Sepak Plastik', harga: 5000, kategori: 'Mainan', emoji: '⚽' },
+      { id: '40', nama: 'Balok Lego Susun', harga: 5000, kategori: 'Mainan', emoji: '🧩' },
+      { id: '41', nama: 'Robot Transformer', harga: 10000, kategori: 'Mainan', emoji: '🤖' },
+      { id: '42', nama: 'Gelembung Sabun', harga: 2000, kategori: 'Mainan', emoji: '🫧' },
+      { id: '43', nama: 'Pesawat Mainan', harga: 3000, kategori: 'Mainan', emoji: '✈️' },
+      { id: '44', nama: 'Yo-Yo Lampu', harga: 2000, kategori: 'Mainan', emoji: '🪀' },
+
+      // Obat-obatan
+      { id: '45', nama: 'Obat Batuk Anak', harga: 4000, kategori: 'Obat', emoji: '💊' },
+      { id: '46', nama: 'Plester Luka Gambar', harga: 1000, kategori: 'Obat', emoji: '🩹' },
+      { id: '47', nama: 'Minyak Kayu Putih', harga: 5000, kategori: 'Obat', emoji: '🧴' },
+      { id: '48', nama: 'Vitamin C Rasa Jeruk', harga: 2000, kategori: 'Obat', emoji: '🍊' },
+      { id: '49', nama: 'Tisu Basah Steril', harga: 3000, kategori: 'Obat', emoji: '🧻' },
+
+      // Buah-buahan Segar
+      { id: '50', nama: 'Apel Merah Segar', harga: 3000, kategori: 'Buah', emoji: '🍎' },
+      { id: '51', nama: 'Pisang Manis (1 Sisir)', harga: 5000, kategori: 'Buah', emoji: '🍌' },
+      { id: '52', nama: 'Jeruk Manis Segar', harga: 2000, kategori: 'Buah', emoji: '🍊' },
+      { id: '53', nama: 'Semangka Potong', harga: 4000, kategori: 'Buah', emoji: '🍉' },
+      { id: '54', nama: 'Anggur Ungu Manis', harga: 5000, kategori: 'Buah', emoji: '🍇' },
+      { id: '55', nama: 'Stroberi Segar', harga: 3000, kategori: 'Buah', emoji: '🍓' },
+      { id: '56', nama: 'Mangga Arumanis', harga: 4000, kategori: 'Buah', emoji: '🥭' },
+      { id: '57', nama: 'Melon Potong Segar', harga: 3000, kategori: 'Buah', emoji: '🍈' },
+      { id: '58', nama: 'Alpukat Mentega', harga: 5000, kategori: 'Buah', emoji: '🥑' },
+      { id: '59', nama: 'Nanas Segar', harga: 4000, kategori: 'Buah', emoji: '🍍' }
+    ];
+
+    const KATEGORI_LIST = [
+      { id: 'Semua', nama: 'Semua Juaran', emoji: '🛒' },
+      { id: 'Makanan', nama: 'Makanan', emoji: '🍞' },
+      { id: 'Minuman', nama: 'Minuman', emoji: '🧃' },
+      { id: 'Buah', nama: 'Buah-buahan', emoji: '🍎' },
+      { id: 'Sembako', nama: 'Sembako', emoji: '🍚' },
+      { id: 'Alat Tulis', nama: 'Alat Tulis', emoji: '✏️' },
+      { id: 'Mainan', nama: 'Mainan', emoji: '🧸' },
+      { id: 'Obat', nama: 'Obat-obatan', emoji: '💊' }
+    ];
+
+    // Auto-update to expanded products if updated
+    const DATA_VERSION = "v3_expanded_fruits_59";
+    let storedVersion = localStorage.getItem('salsabila_produk_ver');
+    let produkData;
+
+    if (storedVersion !== DATA_VERSION) {
+      produkData = [...DEFAULT_PRODUCTS];
+      localStorage.setItem('salsabila_produk', JSON.stringify(produkData));
+      localStorage.setItem('salsabila_produk_ver', DATA_VERSION);
+    } else {
+      produkData = JSON.parse(localStorage.getItem('salsabila_produk')) || DEFAULT_PRODUCTS;
+    }
+
+    let keranjang = {}; // Format: { productId: qty }
+    let activeCategory = 'Semua';
+    let voiceEnabled = true;
+    let currentRawPrices = [];
+    let currentGrandTotal = 0;
+
+    function resetDataBawaan() {
+      produkData = [...DEFAULT_PRODUCTS];
+      simpanStorage();
+      renderTableBarang();
+      renderProducts();
+      playSound('pop');
+      speak("Daftar barang lengkap dikembalikan seperti semula.");
+    }
+
+    function simpanStorage() {
+      localStorage.setItem('salsabila_produk', JSON.stringify(produkData));
+      localStorage.setItem('salsabila_produk_ver', DATA_VERSION);
+    }
+
+    /* ==========================================================================
+       SOUND EFFECTS (WEB AUDIO API)
+       ========================================================================== */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSound(type) {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'beep') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now); // D5
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.1); // A5
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'cash') {
+          // Cash register double chime
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(987.77, now); // B5
+          osc.frequency.setValueAtTime(1318.51, now + 0.08); // E6
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'pop') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'error') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(160, now + 0.1);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        }
+      } catch (e) {
+        console.log('Audio Context Error', e);
+      }
+    }
+
+    /* ==========================================================================
+       TEXT-TO-SPEECH (INDONESIAN CHILD-FRIENDLY VOICE)
+       ========================================================================== */
+    function speak(text) {
+      if (!voiceEnabled) return;
+      if (!('speechSynthesis' in window)) return;
+
+      window.speechSynthesis.cancel(); // Stop ongoing speech
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.95; // Slightly slower for clarity
+      utterance.pitch = 1.2; // Friendly higher pitch for kids
+
+      // Try finding Indonesian voice
+      const voices = window.speechSynthesis.getVoices();
+      const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+      if (idVoice) utterance.voice = idVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      const btnIcon = document.getElementById('voice-icon');
+      const btnLabel = document.getElementById('voice-label');
+      const btn = document.getElementById('btn-toggle-voice');
+
+      if (voiceEnabled) {
+        btnIcon.innerText = '🔊';
+        btnLabel.innerText = 'Suara: ON';
+        btn.className = "flex items-center gap-2 bg-purple-100 border-2 border-purple-400 text-purple-700 px-3 py-2 rounded-2xl font-bold text-xs sm:text-sm hover:bg-purple-200 transition";
+        speak("Suara kasir aktif!");
+      } else {
+        btnIcon.innerText = '🔇';
+        btnLabel.innerText = 'Suara: OFF';
+        btn.className = "flex items-center gap-2 bg-slate-100 border-2 border-slate-300 text-slate-500 px-3 py-2 rounded-2xl font-bold text-xs sm:text-sm transition";
+        window.speechSynthesis.cancel();
+      }
+      playSound('pop');
+    }
+
+    /* ==========================================================================
+       RENDERERS & CONTROLLERS
+       ========================================================================== */
+    function formatRupiah(number) {
+      return new Intl.NumberFormat('id-ID').format(number);
+    }
+
+    function initApp() {
+      renderCategoryBar();
+      renderProducts();
+      renderCart();
+      renderTableBarang();
+    }
+
+    // Render Kategori Chips
+    function renderCategoryBar() {
+      const bar = document.getElementById('category-bar');
+      bar.innerHTML = '';
+
+      KATEGORI_LIST.forEach(cat => {
+        const isSelected = activeCategory === cat.id;
+        const btn = document.createElement('button');
+        btn.onclick = () => selectCategory(cat.id);
+        btn.className = `flex items-center gap-1.5 px-3.5 py-2 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition border-2 ${
+          isSelected
+            ? 'bg-sky-500 text-white border-sky-600 shadow-md scale-105'
+            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+        }`;
+        btn.innerHTML = `<span>${cat.emoji}</span> <span>${cat.nama}</span>`;
+        bar.appendChild(btn);
+      });
+    }
+
+    function selectCategory(catId) {
+      activeCategory = catId;
+      const catObj = KATEGORI_LIST.find(c => c.id === catId);
+      document.getElementById('cat-title-icon').innerText = catObj.emoji;
+      document.getElementById('cat-title-name').innerText = catObj.nama;
+      
+      playSound('pop');
+      renderCategoryBar();
+      renderProducts();
+    }
+
+    // Render Grid Produk Kasir
+    function renderProducts() {
+      const grid = document.getElementById('grid-produk');
+      grid.innerHTML = '';
+
+      const filtered = activeCategory === 'Semua' 
+        ? produkData 
+        : produkData.filter(p => p.kategori === activeCategory);
+
+      document.getElementById('item-count-badge').innerText = `${filtered.length} Barang`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-10 font-bold text-slate-400">Tidak ada barang di kategori ini.</div>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.onclick = () => tambahKeKeranjang(p.id);
+        card.className = "bg-white border-2 border-sky-100 hover:border-sky-400 rounded-2xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col items-center text-center group active:scale-95";
+        card.innerHTML = `
+          <div class="text-4xl mb-1 group-hover:scale-110 transition transform">${p.emoji}</div>
+          <div class="font-fredoka font-bold text-slate-800 text-sm leading-tight line-clamp-1">${p.nama}</div>
+          <div class="text-xs font-bold text-sky-600 mt-1 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
+            Rp ${formatRupiah(p.harga)}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ==========================================================================
+       CART & CALCULATOR LOGIC (SIMPLE ADDITION & SUBTRACTION FOR TK B)
+       ========================================================================== */
+    function tambahKeKeranjang(id) {
+      const item = produkData.find(p => p.id === id);
+      if (!item) return;
+
+      if (!keranjang[id]) {
+        keranjang[id] = 1;
+      } else {
+        keranjang[id] += 1;
+      }
+
+      playSound('beep');
+      renderCart();
+
+      // Hitung Total Parsial khusus item ini (Penjumlahan)
+      const qty = keranjang[id];
+      const totalHargaItem = qty * item.harga;
+
+      // Suara Penjumlahan Sederhana
+      let teksSuara = "";
+      if (qty === 1) {
+        teksSuara = `${qty} ${item.nama}, harga ${formatRupiah(item.harga)} rupiah.`;
+      } else {
+        // Penjelasan penjumlahan step by step
+        teksSuara = `${qty} ${item.nama}, total harganya ${formatRupiah(totalHargaItem)} rupiah.`;
+      }
+      speak(teksSuara);
+    }
+
+    function kurangiKeranjang(id) {
+      if (keranjang[id]) {
+        keranjang[id] -= 1;
+        if (keranjang[id] <= 0) {
+          delete keranjang[id];
+        }
+        playSound('pop');
+        renderCart();
+      }
+    }
+
+    function resetKeranjang() {
+      keranjang = {};
+      document.getElementById('input-uang-pas').value = '';
+      document.getElementById('box-kembalian').classList.add('hidden');
+      playSound('pop');
+      renderCart();
+      speak("Keranjang sudah dibersihkan.");
+    }
+
+    function renderCart() {
+      const listContainer = document.getElementById('list-keranjang');
+      listContainer.innerHTML = '';
+
+      const keys = Object.keys(keranjang);
+      let grandTotal = 0;
+      let priceFormulaArr = [];
+      let emojiFormulaArr = [];
+      currentRawPrices = [];
+
+      if (keys.length === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-8 text-slate-400 font-bold text-sm">
+            🛍️ Belum ada barang yang dibeli.<br>Ketuk gambar barang di sebelah kiri!
+          </div>
+        `;
+        document.getElementById('txt-total-bayar').innerText = '0';
+        document.getElementById('txt-rumus-angka').innerText = '0';
+        document.getElementById('txt-rumus-emoji').innerHTML = '';
+        document.getElementById('box-kembalian').classList.add('hidden');
+        currentGrandTotal = 0;
+        return;
+      }
+
+      keys.forEach(id => {
+        const item = produkData.find(p => p.id === id);
+        if (!item) return;
+
+        const qty = keranjang[id];
+        const subtotal = item.harga * qty;
+        grandTotal += subtotal;
+
+        // Buat susunan penjumlahan item satu per satu (contoh: 1.000 + 1.000 + 2.000)
+        for (let i = 0; i < qty; i++) {
+          priceFormulaArr.push(formatRupiah(item.harga));
+          emojiFormulaArr.push(`${item.emoji} ${formatRupiah(item.harga)}`);
+          currentRawPrices.push(item.harga);
+        }
+
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between bg-emerald-50/70 border border-emerald-200 p-2 rounded-xl text-xs sm:text-sm font-bold";
+        row.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xl">${item.emoji}</span>
+            <div>
+              <div class="text-slate-800 font-bold">${item.nama}</div>
+              <div class="text-[11px] text-emerald-700">Rp ${formatRupiah(item.harga)}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex items-center bg-white border border-emerald-300 rounded-lg overflow-hidden">
+              <button onclick="kurangiKeranjang('${item.id}')" class="px-2 py-0.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-black text-sm">-</button>
+              <span class="px-2 font-bold text-emerald-800">${qty}</span>
+              <button onclick="tambahKeKeranjang('${item.id}')" class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-black text-sm">+</button>
+            </div>
+            <div class="w-16 text-right font-bold text-emerald-700">
+              Rp ${formatRupiah(subtotal)}
+            </div>
+          </div>
+        `;
+        listContainer.appendChild(row);
+      });
+
+      document.getElementById('txt-total-bayar').innerText = formatRupiah(grandTotal);
+      currentGrandTotal = grandTotal;
+
+      // Tampilkan Penjumlahan Angka Lengkap (Misal: 1.000 + 1.000 + 2.000 = 4.000)
+      const formulaStr = priceFormulaArr.join(' + ');
+      document.getElementById('txt-rumus-angka').innerText = `${formulaStr} = ${formatRupiah(grandTotal)}`;
+      document.getElementById('txt-rumus-emoji').innerText = emojiFormulaArr.join(' + ');
+    }
+
+    /* Helper Konversi Angka ke Kata Terbilang Indonesia */
+    function terbilang(n) {
+      n = Math.abs(parseInt(n)) || 0;
+      if (n === 0) return "nol";
+      
+      function convert(x) {
+        if (x === 0) return "";
+        const satuan = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+        if (x < 12) return satuan[x];
+        if (x < 20) return convert(x - 10) + " belas";
+        if (x < 100) return (convert(Math.floor(x / 10)) + " puluh " + convert(x % 10)).trim();
+        if (x < 200) return ("seratus " + convert(x - 100)).trim();
+        if (x < 1000) return (convert(Math.floor(x / 100)) + " ratus " + convert(x % 100)).trim();
+        if (x < 2000) return ("seribu " + convert(x - 1000)).trim();
+        if (x < 1000000) return (convert(Math.floor(x / 1000)) + " ribu " + convert(x % 1000)).trim();
+        return x.toString();
+      }
+
+      return convert(n);
+    }
+
+    /* Fungsi Mengucapkan Suara Penjumlahan Lengkap */
+    function bacaPenjumlahan() {
+      if (currentRawPrices.length === 0) {
+        playSound('pop');
+        speak("Keranjang belanja masih kosong. Ketuk gambar barang untuk menambah!");
+        return;
+      }
+
+      playSound('beep');
+      const terbilangPrices = currentRawPrices.map(p => terbilang(p));
+      const kalimat = terbilangPrices.join(" ditambah ") + " sama dengan " + terbilang(currentGrandTotal);
+      speak(kalimat);
+    }
+
+    /* ==========================================================================
+       PAYMENT & CHANGE LOGIC (PENGURANGAN)
+       ========================================================================== */
+    function bayarDenganUang(nominal) {
+      document.getElementById('input-uang-pas').value = nominal;
+      prosesPembayaran(nominal);
+    }
+
+    function bayarManual() {
+      const val = parseInt(document.getElementById('input-uang-pas').value);
+      if (isNaN(val) || val <= 0) {
+        playSound('error');
+        speak("Ketik jumlah uang pembeli terlebih dahulu!");
+        return;
+      }
+      prosesPembayaran(val);
+    }
+
+    function prosesPembayaran(uangBayar) {
+      const keys = Object.keys(keranjang);
+      if (keys.length === 0) {
+        playSound('error');
+        speak("Pilih barang belanjaan dulu di sebelah kiri.");
+        return;
+      }
+
+      let grandTotal = 0;
+      keys.forEach(id => {
+        const item = produkData.find(p => p.id === id);
+        if (item) grandTotal += (item.harga * keranjang[id]);
+      });
+
+      const boxKembali = document.getElementById('box-kembalian');
+      const txtKembali = document.getElementById('txt-kembalian');
+      const txtPenjelasan = document.getElementById('txt-kembali-suara');
+
+      boxKembali.classList.remove('hidden');
+
+      if (uangBayar < grandTotal) {
+        playSound('error');
+        const kurang = grandTotal - uangBayar;
+        txtKembali.innerText = "UANG KURANG!";
+        txtPenjelasan.innerText = `Kurang Rp ${formatRupiah(kurang)}. Minta tambahan uang pembeli ya!`;
+        speak(`Uang tidak cukup. Uangnya kurang ${formatRupiah(kurang)} rupiah.`);
+      } else {
+        playSound('cash');
+        const kembalian = uangBayar - grandTotal;
+        txtKembali.innerText = formatRupiah(kembalian);
+        
+        const kalimatKembali = `Uang dibayar ${formatRupiah(uangBayar)} rupiah. Diberikan kembalian ${formatRupiah(kembalian)} rupiah. Terima kasih Salsabila!`;
+        txtPenjelasan.innerText = `➖ Pengurangan: Rp ${formatRupiah(uangBayar)} - Rp ${formatRupiah(grandTotal)} = Rp ${formatRupiah(kembalian)}`;
+        speak(kalimatKembali);
+
+        // Tampilkan Modal Struk Sukses
+        tampilkanModalSukses(grandTotal, uangBayar, kembalian);
+      }
+    }
+
+    function tampilkanModalSukses(total, bayar, kembali) {
+      const containerItems = document.getElementById('modal-struk-items');
+      containerItems.innerHTML = '';
+
+      Object.keys(keranjang).forEach(id => {
+        const item = produkData.find(p => p.id === id);
+        if (item) {
+          const qty = keranjang[id];
+          const sub = item.harga * qty;
+          const div = document.createElement('div');
+          div.className = "flex justify-between";
+          div.innerHTML = `<span>${item.emoji} ${qty}x ${item.nama}</span> <span>Rp ${formatRupiah(sub)}</span>`;
+          containerItems.appendChild(div);
+        }
+      });
+
+      document.getElementById('modal-total').innerText = formatRupiah(total);
+      document.getElementById('modal-bayar').innerText = formatRupiah(bayar);
+      document.getElementById('modal-kembali').innerText = formatRupiah(kembali);
+
+      setTimeout(() => {
+        document.getElementById('modal-sukses').classList.remove('hidden');
+      }, 400);
+    }
+
+    function tutupModal() {
+      document.getElementById('modal-sukses').classList.add('hidden');
+      resetKeranjang();
+    }
+
+    /* ==========================================================================
+       PRODUCT MANAGEMENT (TAB 2 KELOLA BARANG)
+       ========================================================================== */
+    function renderTableBarang() {
+      const tbody = document.getElementById('table-barang-body');
+      tbody.innerHTML = '';
+
+      produkData.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-purple-50/50 transition border-b border-purple-100";
+        tr.innerHTML = `
+          <td class="p-3 flex items-center gap-2">
+            <span class="text-2xl">${p.emoji}</span>
+            <span>${p.nama}</span>
+          </td>
+          <td class="p-3">
+            <span class="bg-purple-100 text-purple-800 text-xs px-2.5 py-1 rounded-full font-bold">${p.kategori}</span>
+          </td>
+          <td class="p-3 font-bold text-emerald-600">Rp ${formatRupiah(p.harga)}</td>
+          <td class="p-3 text-center">
+            <button onclick="hapusBarang('${p.id}')" class="bg-rose-100 hover:bg-rose-200 text-rose-600 p-1.5 rounded-xl font-bold text-xs transition">
+              🗑️ Hapus
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleSimpanBarang(e) {
+      e.preventDefault();
+      const nama = document.getElementById('add-nama').value.trim();
+      const harga = parseInt(document.getElementById('add-harga').value);
+      const kategori = document.getElementById('add-kategori').value;
+      const emoji = document.getElementById('add-emoji').value.trim() || '📦';
+
+      if (!nama || isNaN(harga)) return;
+
+      const newProduct = {
+        id: Date.now().toString(),
+        nama: nama,
+        harga: harga,
+        kategori: kategori,
+        emoji: emoji
+      };
+
+      produkData.push(newProduct);
+      simpanStorage();
+      renderTableBarang();
+      renderProducts();
+
+      playSound('pop');
+      speak(`Barang baru ${nama} berhasil disimpan!`);
+
+      // Reset Form
+      document.getElementById('add-nama').value = '';
+      document.getElementById('add-harga').value = '';
+    }
+
+    function hapusBarang(id) {
+      const item = produkData.find(p => p.id === id);
+      if (item) {
+        produkData = produkData.filter(p => p.id !== id);
+        simpanStorage();
+        renderTableBarang();
+        renderProducts();
+        playSound('pop');
+        speak(`Barang ${item.nama} telah dihapus.`);
+      }
+    }
+
+    /* ==========================================================================
+       NAVIGATION & TAB SWITCHING
+       ========================================================================== */
+    function switchTab(tab) {
+      playSound('pop');
+      const secKasir = document.getElementById('section-kasir');
+      const secBarang = document.getElementById('section-barang');
+      const btnKasir = document.getElementById('tab-kasir');
+      const btnBarang = document.getElementById('tab-barang');
+
+      if (tab === 'kasir') {
+        secKasir.classList.remove('hidden');
+        secBarang.classList.add('hidden');
+        btnKasir.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-base transition bg-rose-500 text-white shadow";
+        btnBarang.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-base transition text-slate-600 hover:bg-slate-200";
+      } else {
+        secKasir.classList.add('hidden');
+        secBarang.classList.remove('hidden');
+        btnBarang.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-base transition bg-purple-600 text-white shadow";
+        btnKasir.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-base transition text-slate-600 hover:bg-slate-200";
+      }
+    }
+
+    // Window Onload initialization
+    window.onload = function() {
+      initApp();
+      // Pre-load synthesis voices if available
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
+        };
+      }
+    };
+  </script>
+</body>
+</html>
